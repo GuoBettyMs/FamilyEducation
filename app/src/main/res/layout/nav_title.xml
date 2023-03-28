@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="51dp"
+    android:background="@color/bg_address"
+    android:orientation="horizontal">
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:src="@drawable/left"/>
+    <TextView
+        android:id="@+id/nav_title"
+        android:layout_width="0dp"
+        android:layout_weight="5"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:text="我要提建议"
+        android:textColor="@color/white"/>
+</LinearLayout>
