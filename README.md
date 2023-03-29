@@ -1,6 +1,11 @@
 # FamilyEducation
-家教应用（版本33）
+Android 家教应用
 # Android_FamilyEducation
+
+SDK: compileSdk 33、targetSdk 33
+Android Studio version: 11.0.13+0-b1751.21-8125866 aarch64
+运行环境: macOS 13.2.1
+
 
 这是一个家教应用,功能如下:
 一、登录
