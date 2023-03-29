@@ -2,22 +2,17 @@ package com.example.familyeducation.Activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,9 +29,7 @@ public class MainActivity extends AppCompatActivity
     private UserDBHelper mHelper; // 声明一个用户数据库的帮助器对象
     private SQLiteDatabase sql;
     private Boolean bRemember = true;
-    private TextView loginTV,register_userTV,forget_paswdTV;
     private EditText login_numberphoneET,login_paswdET;
-    private CheckBox reme_paswdCB;
 
     //一般onCreateView()用于初始化Fragment的视图，
     // onViewCreated()一般用于初始化视图内各个控件，
@@ -49,10 +42,10 @@ public class MainActivity extends AppCompatActivity
 
         login_numberphoneET = findViewById(R.id.login_numberphoneET);
         login_paswdET = findViewById(R.id.login_paswdET);
-        reme_paswdCB = findViewById(R.id.reme_paswdCB);
-        loginTV = findViewById(R.id.loginTV);
-        register_userTV = findViewById(R.id.register_userTV);
-        forget_paswdTV = findViewById(R.id.forget_paswdTV);
+        CheckBox reme_paswdCB = findViewById(R.id.reme_paswdCB);
+        TextView loginTV = findViewById(R.id.loginTV);
+        TextView register_userTV = findViewById(R.id.register_userTV);
+        TextView forget_paswdTV = findViewById(R.id.forget_paswdTV);
 
         login_paswdET.setOnFocusChangeListener(this);//焦点变化监听器
         loginTV.setOnClickListener(this);
@@ -60,24 +53,19 @@ public class MainActivity extends AppCompatActivity
         reme_paswdCB.setOnCheckedChangeListener(new CheckListener());
 
         //registerForActivityResulta方法只能在onCreate()中注册。onstart()之后就不能注册了
-        ActivityResultLauncher launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            // 从后一个页面携带参数返回当前页面时触发
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                if (result.getResultCode() == RESULT_OK) {
-                    Log.d("kk", "onActivityResult: data = "
-                            + result.getData().getStringExtra("new_password"));
-                }
+        // 从后一个页面携带参数返回当前页面时触发
+        ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+                        new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK) {
+                Log.d("kk", "onActivityResult: data = "+ (result.getData() != null ?
+                        result.getData().getStringExtra("new_password") : null));
             }
         });
-        forget_paswdTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent forget = new Intent(MainActivity.this, LoginForgetActivity.class);
-                // 携带手机号码跳转到找回密码页面
-                forget.putExtra("par_phone", login_numberphoneET.getText().toString());
-                launcher.launch(forget);
-            }
+        forget_paswdTV.setOnClickListener(v -> {
+            Intent forget = new Intent(MainActivity.this, LoginForgetActivity.class);
+            // 携带手机号码跳转到找回密码页面
+            forget.putExtra("par_phone", login_numberphoneET.getText().toString());
+            launcher.launch(forget);
         });
     }
 
@@ -105,6 +93,7 @@ public class MainActivity extends AppCompatActivity
         mHelper.closeLink();
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         String phone = login_numberphoneET.getText().toString();
@@ -121,10 +110,7 @@ public class MainActivity extends AppCompatActivity
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("号码错误");
                     builder.setMessage("请重新注册");
-                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
+                    builder.setPositiveButton("确定", (dialog, which) -> {
                     });
                     AlertDialog alert = builder.create();
                     alert.show();
@@ -147,7 +133,6 @@ public class MainActivity extends AppCompatActivity
                         }
                     }
                 }
-
                 break;
             case R.id.register_userTV:
                 Intent intent1 = new Intent(this, Register_Act.class);
